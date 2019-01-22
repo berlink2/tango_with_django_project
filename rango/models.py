@@ -9,7 +9,7 @@ class Category(models.Model):
     likes = models.IntegerField(default=0)
 
     class Meta:
-        verbose_name_plural = 'Categories'
+        verbose_name_plural = 'categories'
 
     def __str__(self):
         return self.name
