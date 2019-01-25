@@ -15,3 +15,8 @@ def index(request):
     return render(request, 'rango/index.html', context_dict)
 
 
+def about(request):
+    HttpResponse('This is the about page')
+    return render(request, 'rango/about.html/')
+
+

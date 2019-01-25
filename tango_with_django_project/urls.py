@@ -25,6 +25,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^about/', views.about, name='about'),
     url(r'^rango/', include('rango.urls')),
     #above maps any urls starting
     #with rango/ to be handled by the
