@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rango.models import Category, Page
-from django.http import HttpResponse
 from rango.forms import CategoryForm, PageForm
+from rango.forms import UserForm, UserProfileForm
 
 
 def add_page(request, category_name_slug):
@@ -84,3 +84,35 @@ def about(request):
     # Prints out the user name, if no one is logged in it prints anonymoususer
     print(request.user)
     return render(request, 'rango/about.html', {})
+
+
+def register(request):
+    registered = False
+
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST or None)
+        profile_form = UserProfileForm(data=request.POST or None)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+
+            if 'picture' in request.FILES:
+                profile.picture = request.FILES['pictures']
+            profile.save()
+
+            registered = True
+
+        else:
+            print(user_form.errors, profile_form.errors)
+
+    else:
+        user_form = UserForm
+        profile_form = UserProfileForm
+
+    return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form,
+                                                   'registered': registered})
