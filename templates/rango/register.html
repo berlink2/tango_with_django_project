@@ -12,7 +12,8 @@ Register
         <a href="{% url 'index' %}">Return to the homepage.</a><br />
     {% else %}
         Rango says: <strong>Register here!</strong><br />
-        <form id="user_form" method="POST" action="{% url 'register' %}" enctype="multipart/form-data">
+        <form id="user_form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+        <form id="profile_form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ user_form.as_p }}
         {{ profile_form.as_p }}

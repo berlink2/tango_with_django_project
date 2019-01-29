@@ -2,8 +2,15 @@ from django.shortcuts import render
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 
+@login_required
 def add_page(request, category_name_slug):
 
     try:
@@ -27,6 +34,7 @@ def add_page(request, category_name_slug):
     return render(request, 'rango/add_page.html', context_dict)
 
 
+@login_required
 def add_category(request):
     form = CategoryForm()
 
@@ -90,8 +98,8 @@ def register(request):
     registered = False
 
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST or None)
-        profile_form = UserProfileForm(data=request.POST or None)
+        user_form = UserForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
@@ -102,7 +110,7 @@ def register(request):
             profile.user = user
 
             if 'picture' in request.FILES:
-                profile.picture = request.FILES['pictures']
+                profile.picture = request.FILES['picture']
             profile.save()
 
             registered = True
@@ -116,3 +124,39 @@ def register(request):
 
     return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form,
                                                    'registered': registered})
+
+
+def user_login(request):
+    context_dict = {}
+    context = RequestContext(request)
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            else:
+                context_dict['account_disabled'] = True
+                return render_to_response('rango/login.html', context_dict, context)
+        else:
+            print("Invalid login details: {0}, {1}".format(username, password))
+            context_dict['wrong_login_info'] = True
+            return render_to_response('rango/login.html', context_dict, context)
+    else:
+        return render(request, 'rango/login.html', {})
+
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('index'))
+
+
+@login_required
+def restricted(request):
+    return render(request, 'rango/restricted.html', {})
+
