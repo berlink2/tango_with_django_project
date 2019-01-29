@@ -79,5 +79,8 @@ def index(request):
 
 
 def about(request):
-    HttpResponse('This is the about page')
-    return render(request, 'rango/about.html/')
+    # Prints out whether message is a GET or a POST
+    print(request.method)
+    # Prints out the user name, if no one is logged in it prints anonymoususer
+    print(request.user)
+    return render(request, 'rango/about.html', {})
