@@ -134,7 +134,7 @@ def about(request):
     context_dict = {}
     count = request.session.get('visits', 0)
     context_dict['visit_count'] = count
-    return render_to_response('rango/about.html', context_dict, context)
+    return render(request, 'rango/about.html', context = context_dict)
 
 
 def register(request):
