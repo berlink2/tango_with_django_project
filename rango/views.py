@@ -87,11 +87,8 @@ def index(request):
     context_dict = {'categories': category_list, 'pages': pages_list}
 
     visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
-    count = request.session.get('visits', 0)
-    context_dict['visit_count'] = count
-    context = context_dict
-    response = render(request, 'rango/index.html', context)
+    context_dict['visits'] = request.session.get('visits', 0)
+    response = render(request, 'rango/index.html', context=context_dict)
     # Render the response and send it back!
     return response
 
@@ -108,11 +105,8 @@ def about(request):
     context_dict = {}
     context = RequestContext(request)
     visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
-    count = request.session.get('visits', 0)
-    context_dict['visit_count'] = count
-    context = context_dict
-    return render(request, 'rango/about.html', context)
+    context_dict['visits'] = request.session.get('visits', 0)
+    return render(request, 'rango/about.html', context=context_dict)
 
 
 def get_server_side_cookie(request, cookie, default_val=None):
