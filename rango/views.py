@@ -105,8 +105,10 @@ def about(request):
     # Prints out the user name, if no one is logged in it prints anonymoususer
     print(request.user)
 
-    context = RequestContext(request)
     context_dict = {}
+    context = RequestContext(request)
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
     count = request.session.get('visits', 0)
     context_dict['visit_count'] = count
     context = context_dict
