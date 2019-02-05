@@ -67,9 +67,10 @@ def show_category(request, category_name_slug):
 
         context_dict['category'] = category
 
-    except Category.DoesnotExist:
+    except Category.DoesNotExist:
         context_dict['pages'] = None
         context_dict['category'] = None
+        pass
 
     return render(request, 'rango/category.html', context_dict)
 
@@ -87,9 +88,29 @@ def index(request):
 
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
-    response = render(request, 'rango/index.html', context = context_dict)
+    count = request.session.get('visits', 0)
+    context_dict['visit_count'] = count
+    context = context_dict
+    response = render(request, 'rango/index.html', context)
     # Render the response and send it back!
     return response
+
+
+def about(request):
+    if request.session.test_cookie_worked():
+        print("Test cookie worked")
+        request.session.delete_test_cookie()
+    # Prints out whether message is a GET or a POST
+    print(request.method)
+    # Prints out the user name, if no one is logged in it prints anonymoususer
+    print(request.user)
+
+    context = RequestContext(request)
+    context_dict = {}
+    count = request.session.get('visits', 0)
+    context_dict['visit_count'] = count
+    context = context_dict
+    return render(request, 'rango/about.html', context)
 
 
 def get_server_side_cookie(request, cookie, default_val=None):
@@ -119,22 +140,6 @@ def visitor_cookie_handler(request):
 
     # Update/sets the visit cookie
     request.session['visits'] = visits
-
-
-def about(request):
-    if request.session.test_cookie_worked():
-        print("Test cookie worked")
-        request.session.delete_test_cookie()
-    # Prints out whether message is a GET or a POST
-    print(request.method)
-    # Prints out the user name, if no one is logged in it prints anonymoususer
-    print(request.user)
-
-    context = RequestContext(request)
-    context_dict = {}
-    count = request.session.get('visits', 0)
-    context_dict['visit_count'] = count
-    return render(request, 'rango/about.html', context = context_dict)
 
 
 def register(request):

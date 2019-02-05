@@ -35,7 +35,6 @@ class Page(models.Model):
         return self.title
 
 
-
 class UserProfile(models.Model):
     # links user profile to user model instance
     user = models.OneToOneField(User)

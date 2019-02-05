@@ -4,10 +4,9 @@
     About Rango
 {% endblock %}
 {% block body_block %}
-
-<img src="{% static "images/django.jpg" %}" alt="Picture of Django"/>
-Rango says hey there partner! <br/>
-You have visited Rango {{ visit_count }} time(s).<br />
+Rango says here is the about page <br />
+Rango says hey there partner! <br />
+visits: {{ visit_count }}<br />
 This tutorial has been put together by Berlian.<br/>
 <a href="{% url 'about' %}">About</a><br/>
 <div>
