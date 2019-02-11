@@ -6,12 +6,12 @@ Register
 {% endblock %}
 
 {% block body_block %}
-    <h1><strong>register here!</strong><br /></h1>
+    <h1>Register for Rango</h1>
     {% if  registered %}
         Rango says: <strong>thank you for registering!</strong>
         <a href="{% url 'index' %}">Return to the homepage.</a><br />
     {% else %}
-        Rango says: <strong>Register here!</strong><br />
+        Rango says: <strong>register here!</strong><br />
         <form id="user_form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
         <form id="profile_form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
         {% csrf_token %}
